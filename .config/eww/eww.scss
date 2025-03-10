@@ -1,0 +1,93 @@
+$matcha: #8ba888;
+
+* {
+  all: unset; // Unsets everything so you can style everything from scratch
+}
+
+button:hover {
+  background-color: rgba(255, 255, 250, 0.2);
+}
+
+.eww-bar,
+.power-menu-container {
+  background-color: #232323;
+  color: white;
+  font-family: monospace;
+}
+
+.rightbox {
+  padding-right: 16px;
+}
+
+.workspaces {
+  padding: 0 10px;
+}
+
+.workspaces button {
+  padding: 5px 10px;
+}
+
+.workspaces button:hover {
+  border-radius: 8px;
+}
+
+.active-workspace {
+  background-color: $matcha;
+  border-radius: 8px;
+  color: black;
+}
+
+.power-button {
+  padding: 5px 10px;
+}
+
+.volume-slider {
+  min-width: 100px;
+  margin: 0 8px;
+}
+
+.volume-slider trough {
+  background-color: #333333;
+  border-radius: 5px;
+  min-height: 10px;
+  min-width: 100px;
+}
+
+.volume-slider trough highlight {
+  background-color: $matcha;
+  border-radius: 5px;
+}
+
+.volume-slider slider {
+  background-color: white;
+  border-radius: 50%;
+  min-width: 16px;
+  min-height: 16px;
+  margin: -7px; // Helps center the slider on the trough
+}
+
+.icon {
+  font-family: "Font Awesome 6 Free Solid";
+  font-weight: 900;
+  font-size: 16px;
+  padding: 0 5px;
+  margin-bottom: 1px;
+}
+
+.notifications {
+  min-height: 0px;
+  background-color: transparent;
+}
+
+.notif {
+  background-color: #282828;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border-width: 2;
+  border-color: #fabd2f;
+}
+
+.notif image {
+  padding-right: 10px;
+}
