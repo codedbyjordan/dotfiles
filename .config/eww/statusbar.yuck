@@ -38,8 +38,6 @@
 (button :onclick "i3-msg workspace number 9" 
        :class "${current_workspace == 9 ? 'active-workspace' : ''}" 9)))
 
-
-
 (defwidget power_button []
   (button :class "power-button" :onclick "/opt/eww open --toggle powermenu" 
     (label
