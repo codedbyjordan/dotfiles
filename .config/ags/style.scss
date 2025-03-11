@@ -1,0 +1,28 @@
+$matcha: #8ba888;
+$brown: #9e7c5f;
+
+* {
+  all: unset;
+}
+
+window.Bar {
+  font-family: "JetBrains Mono";
+  .container {
+    padding: 4px 32px;
+    background-color: #212121;
+  }
+  .Workspaces {
+    button {
+      padding: 5px 10px;
+      border-radius: 8px;
+    }
+    button:hover {
+      background-color: #2a2a2a;
+    }
+
+    .active-workspace {
+      background-color: $matcha;
+      color: #212121;
+    }
+  }
+}

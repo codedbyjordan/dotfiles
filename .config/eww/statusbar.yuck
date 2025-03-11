@@ -72,6 +72,7 @@
                       :anchor "top center")
   :stacking "fg"
   :reserve (struts :distance "30px" :side "top")
+  :exclusive true
   :wm-ignore false
   (box
     :class "eww-bar"
