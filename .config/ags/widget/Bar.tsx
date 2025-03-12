@@ -1,11 +1,18 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
 import { bind, GLib, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
+import Wp from "gi://AstalWp";
 
 const time = Variable<string>("").poll(
   1000,
   () => GLib.DateTime.new_now_local().format("%I:%M %p - %d/%m/%Y")!
 );
+
+const cpuUsage = Variable<string>("").poll(5000, [
+  "bash",
+  "-c",
+  "mpstat 1 1 | awk '/Average:/ {print 100-$NF\"%\"}'",
+]);
 
 function Workspaces() {
   const hypr = Hyprland.get_default();
@@ -33,22 +40,47 @@ function Workspaces() {
   );
 }
 
-function Power() {
-  const power = bind(Hyprland.get_default(), "powerManagement");
-
+function SessionButton() {
   return (
     <button
-      className={power.as((p) => (p ? "" : "disabled"))}
-      onClicked={() => power.set(!power.get())}
+      className="power-button"
+      onClick={() => {
+        App.toggle_window("session-menu");
+      }}
     >
-      {power.as((p) => (p ? "🔌" : "🔋"))}
+      
     </button>
+  );
+}
+
+function Volume() {
+  const defaultSpeaker = Wp.get_default()!.audio.defaultSpeaker;
+
+  const volume = bind(defaultSpeaker, "volume");
+
+  return (
+    <box spacing={12}>
+      <label label={volume.as((v) => `${Math.round(v * 100)}%`)} />
+      <label label="" className="icon" />
+      <slider
+        className="volume-slider"
+        widthRequest={100}
+        min={0}
+        max={100}
+        value={volume.as((v) => {
+          return Math.round(v * 100);
+        })}
+        onValueChanged={(slider) => {
+          const value = slider.get_value();
+          defaultSpeaker?.set_volume(parseFloat((value / 100).toFixed(2)));
+        }}
+      />
+    </box>
   );
 }
 
 export default function Bar(gdkmonitor: Gdk.Monitor) {
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
-
   return (
     <window
       className="Bar"
@@ -58,15 +90,24 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
       application={App}
       heightRequest={24}
     >
-      <box className="container">
+      <centerbox className="container">
         <box>
           <Workspaces />
         </box>
-        <box hexpand halign={Gtk.Align.END}>
+        <label
+          label={bind(Hyprland.get_default(), "focusedClient").as(
+            (fc) => fc.title
+          )}
+          lines={1}
+          widthChars={50}
+        />
+        <box className="right-box" hexpand halign={Gtk.Align.END}>
+          <Volume />
+          <label label={cpuUsage().as((cu) => `CPU: ${cu}`)} />
           <label label={time()} />
-          <Power />
+          <SessionButton />
         </box>
-      </box>
+      </centerbox>
     </window>
   );
 }

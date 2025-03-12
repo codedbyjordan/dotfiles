@@ -1,20 +1,26 @@
 $matcha: #8ba888;
 $brown: #9e7c5f;
 
-* {
+window {
+  font-family: "JetBrains Mono";
+  & > .container {
+    background-color: #131313;
+  }
+}
+
+button {
   all: unset;
 }
 
-window.Bar {
-  font-family: "JetBrains Mono";
+.Bar {
   .container {
-    padding: 4px 32px;
-    background-color: #212121;
+    padding: 4px 16px;
   }
   .Workspaces {
     button {
-      padding: 5px 10px;
-      border-radius: 8px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin: 0px 4px;
     }
     button:hover {
       background-color: #2a2a2a;
@@ -25,4 +31,35 @@ window.Bar {
       color: #212121;
     }
   }
+}
+
+.SessionMenu .container {
+  padding: 4px 32px;
+}
+
+.right-box > * {
+  margin: 0 8px;
+}
+
+.volume-slider {
+  padding: 0px;
+}
+
+.volume-slider trough {
+  background-color: #333333;
+  border-radius: 7px;
+  min-height: 12px;
+  min-width: 100px;
+}
+
+.volume-slider trough highlight {
+  background-color: $matcha;
+  border-radius: 7px;
+}
+
+.volume-slider slider {
+  border-radius: 50%;
+  min-width: 18px;
+  min-height: 18px;
+  margin: -7px; // Helps center the slider on the trough
 }
