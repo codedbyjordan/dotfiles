@@ -1,5 +1,5 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk3";
-import { bind, GLib, Variable } from "astal";
+import { bind, exec, execAsync, GLib, Variable } from "astal";
 import Hyprland from "gi://AstalHyprland";
 import Wp from "gi://AstalWp";
 
@@ -103,6 +103,16 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
         />
         <box className="right-box" hexpand halign={Gtk.Align.END}>
           <Volume />
+          <button
+            label=""
+            onClick={async () => {
+              try {
+                await execAsync("hyprshot -m output --clipboard-only");
+              } catch (e) {
+                print(e);
+              }
+            }}
+          />
           <label label={cpuUsage().as((cu) => `CPU: ${cu}`)} />
           <label label={time()} />
           <SessionButton />
