@@ -5,13 +5,25 @@ import Wp from "gi://AstalWp";
 
 const time = Variable<string>("").poll(
   1000,
-  () => GLib.DateTime.new_now_local().format("%I:%M %p - %d/%m/%Y")!
+  () => GLib.DateTime.new_now_local().format("%I:%M %p - %m/%d/%Y")!
 );
 
-const cpuUsage = Variable<string>("").poll(5000, [
+const weather = Variable("").poll(60000, [
+  "bash",
+  "-c",
+  "curl 'wttr.in/?format=1' | grep -oP '([+-][0-9]*°F)'",
+]);
+
+const cpuUsage = Variable("").poll(5000, [
   "bash",
   "-c",
   "mpstat 1 1 | awk '/Average:/ {print 100-$NF\"%\"}'",
+]);
+
+const ramUsage = Variable("").poll(5000, [
+  "bash",
+  "-c",
+  "free -m | awk '/Mem:/ {printf \"%.1f%%\", ($2-$7)/$2*100}'",
 ]);
 
 function Workspaces() {
@@ -23,7 +35,7 @@ function Workspaces() {
     <box className="Workspaces">
       {bind(hypr, "workspaces").as((wss) =>
         wss
-          .filter((ws) => !(ws.id >= -99 && ws.id <= -2)) // filter out special workspaces
+          .filter((ws) => !(ws.id >= -99 && ws.id <= -2))
           .sort((a, b) => a.id - b.id)
           .map((ws) => (
             <button
@@ -113,8 +125,10 @@ export default function Bar(gdkmonitor: Gdk.Monitor) {
               }
             }}
           />
+          <label label={weather().as((w) => `${w}`)} />
           <label label={cpuUsage().as((cu) => `CPU: ${cu}`)} />
-          <label label={time()} />
+          <label label={ramUsage().as((ru) => `RAM: ${ru}`)} />
+          <label label={time().as((t) => ` ${t}`)} />
           <SessionButton />
         </box>
       </centerbox>
