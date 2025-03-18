@@ -22,7 +22,20 @@ SCSS_FILE="$HOME/.config/eww/eww.scss"  # Update this path to your specific scss
 echo "Watching for changes to eww config files (Press Ctrl+C to exit)"
 while true; do
     inotifywait -q -e modify "$YUCK_FILE" "$SCSS_FILE"
+    
+    # Close all eww widgets and wait for completion
     eww close-all
-    sleep 0.5
+    
+    # Give eww time to fully close and release resources
+    # You can increase this if needed
+    sleep 1
+    
+    # Make sure any lingering eww processes are terminated
+    if pgrep -f "eww.*statusbar" > /dev/null; then
+        pkill -f "eww.*statusbar"
+        sleep 0.5
+    fi
+    
+    # Reopen the statusbar
     eww open statusbar
 done

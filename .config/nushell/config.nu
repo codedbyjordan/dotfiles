@@ -1,4 +1,4 @@
-$env.path = $env.path | append ($env.HOME + "/.local/share/fnm") | append ($env.HOME + "/go/bin")
+$env.path = $env.path | append ($env.HOME + "/.local/share/fnm") | append ($env.HOME + "/go/bin") | append /opt
 
 fnm env --json | from json | load-env
 $env.path = $env.path | append $env.FNM_MULTISHELL_PATH
@@ -22,4 +22,5 @@ def create_prompt [] {
 $env.PROMPT_COMMAND = { create_prompt } 
 $env.PROMPT_COMMAND_RIGHT = {""}
 $env.PROMPT_INDICATOR = {" "}
- 
+
+source ~/.cache/carapace/init.nu

@@ -1,8 +1,9 @@
-(deflisten current_workspace :initial "1"
-  "i3-msg -t subscribe -m '[ \"workspace\" ]' | while read -r line; do echo $(i3-msg -t get_workspaces | jq '.[] | select(.focused==true).num'); done")
+(deflisten workspace :initial "1" "$HOME/.config/eww/scripts/workspace.sh")
 
 (defpoll time :interval "10s"
   "date '+%I:%M %p %m/%d/%Y'")
+
+(defvar is_muted false)
 
 (defpoll window_title :interval "30ms"
   "echo $(xdotool getwindowfocus getwindowname)")
@@ -14,29 +15,8 @@
   "curl 'wttr.in/?format=1' | grep -oP '([+-][0-9]*°F)'")
 
 (defwidget workspaces []
-  (box :class "workspaces"
-       :orientation "h"
-       :space-evenly true
-       :halign "start"
-       :spacing 10
-       (button :onclick "i3-msg workspace number 1" 
-       :class "${current_workspace == 1 ? 'active-workspace' : ''}" 1)
-(button :onclick "i3-msg workspace number 2" 
-       :class "${current_workspace == 2 ? 'active-workspace' : ''}" 2)
-(button :onclick "i3-msg workspace number 3" 
-       :class "${current_workspace == 3 ? 'active-workspace' : ''}" 3)
-(button :onclick "i3-msg workspace number 4" 
-       :class "${current_workspace == 4 ? 'active-workspace' : ''}" 4)
-(button :onclick "i3-msg workspace number 5" 
-       :class "${current_workspace == 5 ? 'active-workspace' : ''}" 5)
-(button :onclick "i3-msg workspace number 6" 
-       :class "${current_workspace == 6 ? 'active-workspace' : ''}" 6)
-(button :onclick "i3-msg workspace number 7" 
-       :class "${current_workspace == 7 ? 'active-workspace' : ''}" 7)
-(button :onclick "i3-msg workspace number 8" 
-       :class "${current_workspace == 8 ? 'active-workspace' : ''}" 8)
-(button :onclick "i3-msg workspace number 9" 
-       :class "${current_workspace == 9 ? 'active-workspace' : ''}" 9)))
+  (literal :content workspace)
+)
 
 (defwidget power_button []
   (button :class "power-button" :onclick "/opt/eww open --toggle powermenu" 
@@ -50,7 +30,9 @@
   (box
     :space-evenly false
     (label :text "${current_volume}% ")
-    (label :text "" :class "icon")
+    (button :class "icon" :onclick "./scripts/toggle_mute.sh"
+      (label :text {is_muted ? "" : ""})
+    )
     (scale 
     :class "volume-slider"
     :min 0 
@@ -68,7 +50,7 @@
   :geometry (geometry :x "0%"
                       :y "0%"
                       :width "100%"
-                      :height "30px"
+                      :height "36px"
                       :anchor "top center")
   :stacking "fg"
   :reserve (struts :distance "30px" :side "top")
@@ -79,6 +61,7 @@
     (box :space-evenly true
       (box :class "leftbox" 
           :halign "start"
+          :valign "center"
           :hexpand true
           (workspaces))
       (box :class "centerbox"
@@ -90,8 +73,6 @@
           :spacing 16
           :hexpand true
           (volume)
-          (button :onclick "flameshot gui" (label :text "" :class "icon"))
-          (button :onclick "solaar config \"G Pro\" dpi 400" (label :text "" :class "icon"))
           (label :text "${weather}")
           (label :text "CPU: ${round(EWW_CPU.avg, 1)}%")
           (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 1)}%")

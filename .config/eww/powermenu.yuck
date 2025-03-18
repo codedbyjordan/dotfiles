@@ -1,13 +1,13 @@
 (defwindow powermenu
   :monitor 0
   :geometry (geometry :x "0px"
-                      :y "32px"
+                      :y "0px"
                       :width "10%"
                       :height "30px"
                       :anchor "top right")
                       :stacking "fg"
   :wm-ignore true
-    (box :space-evenly false :class "power-menu-container" (button :hexpand true :onclick "i3-msg exit" ( 
+    (box :space-evenly false :class "power-menu-container" (button :hexpand true :onclick "hyprctl dispatch exit" ( 
       label :text "Logout"
     ))) 
   )
