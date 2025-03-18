@@ -1,7 +1,8 @@
 (deflisten workspace :initial "1" "$HOME/.config/eww/scripts/workspace.sh")
 
-(defpoll time :interval "10s"
-  "date '+%I:%M %p %m/%d/%Y'")
+(defpoll time :interval "10s" "date '+%I:%M %p'")
+
+(defpoll date :interval "10s" "date '+%m/%d/%Y'")
 
 (defvar is_muted false)
 
@@ -76,6 +77,7 @@
           (label :text "${weather}")
           (label :text "CPU: ${round(EWW_CPU.avg, 1)}%")
           (label :text "RAM: ${round(EWW_RAM.used_mem_perc, 1)}%")
-          (label :text " ${time}")
+          (label :text " ${date}")
+	  (label :text " ${time}")
           (power_button)
       ))))

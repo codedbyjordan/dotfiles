@@ -1,7 +1,6 @@
 $env.path = $env.path | append ($env.HOME + "/.local/share/fnm") | append ($env.HOME + "/go/bin") | append /opt
 
-fnm env --json | from json | load-env
-$env.path = $env.path | append $env.FNM_MULTISHELL_PATH
+source /home/jordo/.config/nushell/fnm.nu
 
 $env.matcha = "#8ba888"
 $env.brown = "#9e7c5f"
