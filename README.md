@@ -1,0 +1,3 @@
+## Jordan's Dotfiles
+
+WARNING: the bash code here is terrible and the yuck code is unorganized. i just wanted something that works for right now and i will clean things up later. proceed with caution...
